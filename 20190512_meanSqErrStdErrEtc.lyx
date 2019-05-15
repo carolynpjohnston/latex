@@ -81,9 +81,8 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-The purpose of this document is to provide some 'notes to myself' to help
- differentiate among all the different notions of error in common use in
- statistical writing.
+The purpose of this document is to differentiate among all the different
+ terms of error (with similar names) in common use in statistical writing.
 \end_layout
 
 \begin_layout Standard
@@ -96,11 +95,10 @@ A
 \series bold
 statistic 
 \series default
-is a measurement of an attribute of a sample.
+is a function of a sample.
  The mean of a sample is a statistic; the population mean of the underlying
  random variable is not.
- In practice, they fudge the difference, using the term statistic for both
- the 
+ In practice, the term statistic is used for both the 
 \emph on
 function
 \emph default
@@ -118,27 +116,24 @@ estimator
 \series default
  is a random variable used for estimating a given quantity, usually a population
  parameter, based on a sample.
- Examples: the sample mean 
-\begin_inset Formula 
-\[
-\bar{{X}}=\frac{{1}}{N}\Sigma_{i=1}^{N}X_{i}
-\]
-
+ Examples: given an i.i.d.
+ sample 
+\begin_inset Formula $X_{1},...,X_{N}$
 \end_inset
 
- of a random variable 
-\begin_inset Formula $X$
+ of normal random variables, the sample mean 
+\begin_inset Formula 
+\[
+\bar{X}=\frac{1}{N}\Sigma_{i=1}^{N}X_{i}
+\]
+
 \end_inset
 
  is an estimator for the population mean 
 \begin_inset Formula $\mu$
 \end_inset
 
- of a normal random variable 
-\begin_inset Formula $X$
-\end_inset
-
-; the (unbiased) sample variance 
+ and the (unbiased) sample variance 
 \begin_inset Formula 
 \[
 \hat{\sigma}^{2}=\frac{{1}}{N-1}\Sigma_{i=1}^{N}(X_{i}-\bar{X})^{2}
@@ -148,10 +143,6 @@ estimator
 
  is an estimator for the population variance 
 \begin_inset Formula $\sigma^{2}$
-\end_inset
-
-of a normal random variable 
-\begin_inset Formula $X$
 \end_inset
 
 .
@@ -199,7 +190,7 @@ of the estimator is the quantity
 \end_layout
 
 \begin_layout Section
-Notions of variance and error
+Terms of variance and error
 \end_layout
 
 \begin_layout Enumerate
@@ -300,13 +291,12 @@ The variance portion of the MSE can be thought of as
 'accuracy'
 \emph default
  of the estimator.
- Note that MSE is a characteristic of the estimator itself, which is a random
- variable.
  
 \end_layout
 
 \begin_layout Standard
-We can't have an estimator with a 'best MSE' for all values of 
+It's impossible to have an estimator with a 'best MSE' for all values of
+ 
 \begin_inset Formula $\theta$
 \end_inset
 
@@ -345,8 +335,7 @@ The
 standard error
 \series default
  of a statistic is the standard deviation of its sampling distribution.
- Here's the fun part: the standard error of a statistic is usually a function
- of the 
+ The standard error of a statistic is a function of the 
 \emph on
 population
 \emph default
@@ -360,12 +349,13 @@ population
 \end_layout
 
 \begin_layout Standard
-However the population standard deviation is usually unknown, so the standard
+However, the population standard deviation is usually unknown, so the standard
  error has to be estimated too, in an infinite regression of estimations.
- For example, the standard error of the mean is usually estimated as
+ For example, the standard error of the sample mean is usually estimated
+ as
 \begin_inset Formula 
 \[
-SE(\bar{X})=\frac{{s}}{\sqrt{{N}}},
+\hat{SE}(\bar{X})=\frac{s}{\sqrt{N}},
 \]
 
 \end_inset
@@ -396,7 +386,7 @@ margin of error
 survey
 \emph default
  statistic.
- As such it usually depends on standard error.
+ As such it usually depends on the estimated standard error.
  Suppose you have estimated a population proportion using a sample proportion;
  then you would calculate an estimate of the standard error as 
 \begin_inset Formula $SE(\hat{p})=\sqrt{\hat{p}(1-\hat{p})/N}.$
