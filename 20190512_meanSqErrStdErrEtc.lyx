@@ -1,0 +1,414 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Mean squared error, standard error, margin of error, and all that
+\end_layout
+
+\begin_layout Author
+Carolyn Johnston
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The purpose of this document is to provide some 'notes to myself' to help
+ differentiate among all the different notions of error in common use in
+ statistical writing.
+\end_layout
+
+\begin_layout Standard
+All these notions of error have to do with estimation of population parameters.
+ 
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+statistic 
+\series default
+is a measurement of an attribute of a sample.
+ The mean of a sample is a statistic; the population mean of the underlying
+ random variable is not.
+ In practice, they fudge the difference, using the term statistic for both
+ the 
+\emph on
+function
+\emph default
+ of the sample that is used to derive the statistic, and the 
+\emph on
+number
+\emph default
+ that is the function applied to the sample.
+\end_layout
+
+\begin_layout Standard
+An 
+\series bold
+estimator
+\series default
+ is a random variable used for estimating a given quantity, usually a population
+ parameter, based on a sample.
+ Examples: the sample mean 
+\begin_inset Formula 
+\[
+\bar{{X}}=\frac{{1}}{N}\Sigma_{i=1}^{N}X_{i}
+\]
+
+\end_inset
+
+ of a random variable 
+\begin_inset Formula $X$
+\end_inset
+
+ is an estimator for the population mean 
+\begin_inset Formula $\mu$
+\end_inset
+
+ of a normal random variable 
+\begin_inset Formula $X$
+\end_inset
+
+; the (unbiased) sample variance 
+\begin_inset Formula 
+\[
+\hat{\sigma}^{2}=\frac{{1}}{N-1}\Sigma_{i=1}^{N}(X_{i}-\bar{X})^{2}
+\]
+
+\end_inset
+
+ is an estimator for the population variance 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+of a normal random variable 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ Note that estimators themselves are functions of random variables, therefore
+ random variables.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ is an estimator used to estimate a population parameter 
+\begin_inset Formula $\theta,$
+\end_inset
+
+ then the 
+\series bold
+bias 
+\series default
+of the estimator is the quantity 
+\begin_inset Formula $B(\hat{\theta)}=E(\hat{\theta})-\theta$
+\end_inset
+
+.
+ If the expected value of the estimator is equal to the population parameter
+ value, so that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $B(\hat{\theta)}=0,$
+\end_inset
+
+ then the estimator is called unbiased.
+\end_layout
+
+\begin_layout Section
+Notions of variance and error
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Variance of a random variable:
+\series default
+ defined to be 
+\begin_inset Formula $V(\theta)=E((\theta-E(\theta))^{2}).$
+\end_inset
+
+ It is usually a function of a population parameter.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Mean squared error of an estimator
+\series default
+: defined to be 
+\begin_inset Formula $MSE(\hat{\theta})=E((\hat{\theta}-E(\theta))^{2}),$
+\end_inset
+
+ the expected value of the squared distance between the estimator and the
+ true population parameter.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Standard error of an estimator
+\series default
+: defined to be the standard deviation of the estimator's sampling distribution:
+ 
+\begin_inset Formula $\sqrt{V(\bar{X}_{N})}$
+\end_inset
+
+, for example, where 
+\begin_inset Formula $\bar{X_{N}}$
+\end_inset
+
+ is the sample mean of a random variable 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ It is a function of 
+\emph on
+population 
+\emph default
+parameters of 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+What is Mean Squared Error?
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+mean squared error 
+\series default
+of an estimator is defined to be
+\begin_inset Formula 
+\[
+MSE(\hat{\theta})=E[(\hat{\theta}-\theta)^{2}]=B(\hat{\theta})^{2}+V(\hat{\theta}),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $V$
+\end_inset
+
+ is the variance of the estimator: 
+\begin_inset Formula $V(\hat{\theta})=E[(\hat{\theta}-E(\hat{\theta})^{2}].$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+The variance portion of the MSE can be thought of as 
+\emph on
+'precision'
+\emph default
+ of the estimator, and the bias portion can be thought of as 
+\emph on
+'accuracy'
+\emph default
+ of the estimator.
+ Note that MSE is a characteristic of the estimator itself, which is a random
+ variable.
+ 
+\end_layout
+
+\begin_layout Standard
+We can't have an estimator with a 'best MSE' for all values of 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ Take as example a normal distribution with 
+\begin_inset Formula $\mu=\theta.$
+\end_inset
+
+ If we define an estimator 
+\begin_inset Formula $\tilde{\mu}=4,$
+\end_inset
+
+ then it has MSE 
+\begin_inset Formula $0$
+\end_inset
+
+ if 
+\begin_inset Formula $\theta$
+\end_inset
+
+ happens to be 4 also, and is a terrible estimator otherwise.
+ However, it is possible to define minimum 
+\emph on
+variance
+\emph default
+ estimators if you restrict yourself to unbiased estimators.
+\end_layout
+
+\begin_layout Section
+What is Standard Error?
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+standard error
+\series default
+ of a statistic is the standard deviation of its sampling distribution.
+ Here's the fun part: the standard error of a statistic is usually a function
+ of the 
+\emph on
+population
+\emph default
+ parameters.
+ For example, the standard error of the sample mean is 
+\begin_inset Formula $\frac{\sigma}{\sqrt{N}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+However the population standard deviation is usually unknown, so the standard
+ error has to be estimated too, in an infinite regression of estimations.
+ For example, the standard error of the mean is usually estimated as
+\begin_inset Formula 
+\[
+SE(\bar{X})=\frac{{s}}{\sqrt{{N}}},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $s$
+\end_inset
+
+ is the sample standard deviation.
+ This is what you usually see as the standard error in statistics packages.
+\end_layout
+
+\begin_layout Section
+What is Margin of Error?
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+margin of error
+\series default
+ is defined to be half the full width of a confidence interval for a 
+\emph on
+survey
+\emph default
+ statistic.
+ As such it usually depends on standard error.
+ Suppose you have estimated a population proportion using a sample proportion;
+ then you would calculate an estimate of the standard error as 
+\begin_inset Formula $SE(\hat{p})=\sqrt{\hat{p}(1-\hat{p})/N}.$
+\end_inset
+
+ To get the margin of error for a 95% confidence interval, assuming a normal
+ sampling distribution, you would multiply this quantity by 
+\begin_inset Formula $z_{0.975}=1.96.$
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

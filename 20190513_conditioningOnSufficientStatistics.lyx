@@ -1,0 +1,1064 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Conditioning on sufficient statistics
+\end_layout
+
+\begin_layout Author
+Carolyn Johnston
+\end_layout
+
+\begin_layout Section
+Conditional distributions
+\end_layout
+
+\begin_layout Standard
+For continuous random variables 
+\begin_inset Formula $Y_{1},Y_{2}$
+\end_inset
+
+ with joint density 
+\begin_inset Formula $f(y_{1,}y_{2}),$
+\end_inset
+
+ we can define the conditional density 
+\begin_inset Formula 
+\[
+f(y_{1}|y_{2})=f(y_{1},y_{2})/f(y_{2}),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $f(y_{2})$
+\end_inset
+
+ is the marginal density for 
+\begin_inset Formula $Y_{2}.$
+\end_inset
+
+ In the right hand side of this expression, 
+\begin_inset Formula $y_{2}$
+\end_inset
+
+ is to be regarded as a constant value, so that 
+\begin_inset Formula $y_{1}$
+\end_inset
+
+ is the only actual variable in 
+\begin_inset Formula $f(y_{1}|y_{2}).$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Trickier conditional densities can also be defined.
+ For example, we can form the conditional density 
+\begin_inset Formula $f(y_{1}|S=s),$
+\end_inset
+
+ where 
+\begin_inset Formula $S=Y_{1}+Y_{2}$
+\end_inset
+
+.
+ This is defined as
+\begin_inset Formula 
+\[
+f(y_{1,}y_{2})/f(s)=f(y_{1,}s-y_{1})/f(s).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that a degree of freedom is lost in the numerator in this case, because
+ 
+\begin_inset Formula $y_{2}$
+\end_inset
+
+ is constrained to equal 
+\begin_inset Formula $s-y_{1}$
+\end_inset
+
+.
+ Thus the conditional density will be a function of 
+\begin_inset Formula $y_{1}$
+\end_inset
+
+alone.
+\end_layout
+
+\begin_layout Standard
+For example, suppose 
+\begin_inset Formula $Y_{1},Y_{2}$
+\end_inset
+
+ are i.i.d.
+ exponential random variables with mean 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ We will show that if we condition their joint density on 
+\begin_inset Formula $S=Y_{1}+Y_{2}=s,$
+\end_inset
+
+ then 
+\begin_inset Formula $Y_{1}$
+\end_inset
+
+ will be distributed uniformly over 
+\begin_inset Formula $[0,s).$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Each 
+\begin_inset Formula $Y_{i}$
+\end_inset
+
+ has distribution 
+\begin_inset Formula $f(y_{i})=\frac{1}{\theta}e^{-y_{i}/\theta}$
+\end_inset
+
+, so the joint density (unconditioned) of 
+\begin_inset Formula $Y_{1},Y_{2}$
+\end_inset
+
+ is 
+\begin_inset Formula $f(y_{1},y_{2})=\frac{1}{\theta^{2}}e^{-(y_{1}+y_{2})/\theta}$
+\end_inset
+
+.
+ Therefore, the numerator of the conditional density is 
+\begin_inset Formula $f(y_{1},s-y_{1})=\frac{1}{\theta^{2}}e^{-s/\theta}I(0\le y_{1}\le s)$
+\end_inset
+
+.
+ That indicator function is included to restrict the support of 
+\begin_inset Formula $f$
+\end_inset
+
+, since both 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ are constrained to be positive and the sum is equal to 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $S$
+\end_inset
+
+ is the sum of two i.i.d.
+ exponential functions, 
+\begin_inset Formula $S$
+\end_inset
+
+ is distributed as a Gamma distribution with parameters 
+\begin_inset Formula $k=2,$
+\end_inset
+
+ rate=
+\begin_inset Formula $\frac{1}{\theta}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+S\sim\frac{1}{\theta^{2}}se^{-s/\theta}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore, the conditional distribution is 
+\begin_inset Formula 
+\[
+f(y_{1}|S=s)=\frac{\frac{1}{\theta^{2}}e^{-s/\theta}I(0\le y_{1}\le s)}{\frac{1}{\theta^{2}}se^{-s/\theta}}=\frac{1}{s}I(0\le y_{1}\le s),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+the uniform distribution over 
+\begin_inset Formula $[0,s).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Sufficient statistics
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $Y_{1},...,Y_{n}$
+\end_inset
+
+ is a sample from a probability distribution that is known up to a parameter
+ 
+\begin_inset Formula $\theta,$
+\end_inset
+
+ then a statistic 
+\begin_inset Formula $T=\tau(Y_{1},...,Y_{n})$
+\end_inset
+
+ is called 
+\series bold
+sufficient for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ 
+\series default
+if the conditional distribution 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $f(Y_{1},...,Y_{n}|T)$
+\end_inset
+
+ does not depend on the parameter 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ The idea is that 
+\begin_inset Formula $T$
+\end_inset
+
+ summarizes everything about the data that is needed for estimating 
+\begin_inset Formula $\theta$
+\end_inset
+
+; put another way, if two random samples have the same value of 
+\begin_inset Formula $T$
+\end_inset
+
+, then any inferences about the value of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ drawn from the two random samples should be the same.
+\end_layout
+
+\begin_layout Standard
+Note that the derivation of 
+\begin_inset Formula $f(y_{1}|s)$
+\end_inset
+
+ in the previous section shows that 
+\begin_inset Formula $S=Y_{1}+Y_{2}$
+\end_inset
+
+ is sufficient for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ in that example, since the uniform distribution 
+\begin_inset Formula $f(y_{1}|S=s)$
+\end_inset
+
+~Unif
+\begin_inset Formula $(0,s)$
+\end_inset
+
+ is independent of 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+It can be hard to calculate the conditional distribution by brute force,
+ but there is a theorem that makes it easier to tell if a statistic is sufficien
+t for a parameter.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Factorization theoem: 
+\series default
+
+\begin_inset Formula $\tau(Y_{1},...,Y_{n})$
+\end_inset
+
+ is sufficient for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ if and only if the (unconditioned) joint density 
+\begin_inset Formula $f(Y_{1},...,Y_{n})$
+\end_inset
+
+ can be factored into two functions:
+\begin_inset Formula 
+\[
+f(Y_{1},...,Y_{n})=g(\theta,t)\cdot h(y_{1},...,y_{n}),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $t=\tau(Y_{1},...,Y_{n})$
+\end_inset
+
+ and 
+\begin_inset Formula $h$
+\end_inset
+
+ does not depend on 
+\begin_inset Formula $\theta$
+\end_inset
+
+.
+ Note that, in the example in section 1, 
+\begin_inset Formula $f(y_{1},y_{2})=\frac{1}{\theta^{2}}e^{-t/\theta}=g(t,\theta)\cdot h(y_{1},y_{2})$
+\end_inset
+
+ where 
+\begin_inset Formula $g(t,\theta)=\frac{1}{\theta^{2}}e^{-t/\theta}$
+\end_inset
+
+ and
+\begin_inset Formula $h(y_{1},y_{2})=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Conditional expected value
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $X,Y$
+\end_inset
+
+ are jointly continuous, define the conditional expectation of 
+\begin_inset Formula $Y$
+\end_inset
+
+ given 
+\begin_inset Formula $X=x$
+\end_inset
+
+ to be
+\begin_inset Formula 
+\[
+E(Y|X=x)=\int y\cdot f(y|x)dy.
+\]
+
+\end_inset
+
+Note we are integrating out 
+\begin_inset Formula $y$
+\end_inset
+
+ and so the conditional expected value is a function of 
+\begin_inset Formula $x.$
+\end_inset
+
+ Having obtained this function 
+\begin_inset Formula $h(x)=E(Y|X=x)$
+\end_inset
+
+, define 
+\begin_inset Formula $E(Y|X)=h(X),$
+\end_inset
+
+ which is a function of the random variable 
+\begin_inset Formula $X.$
+\end_inset
+
+ Thus the conditional expectation 
+\begin_inset Formula $E(Y|X)$
+\end_inset
+
+ is another random variable, a function of 
+\begin_inset Formula $X.$
+\end_inset
+
+ This random variable also has an expectation, calculated over the marginal
+ distribution of 
+\begin_inset Formula $X$
+\end_inset
+
+; and we can prove that 
+\begin_inset Formula $E[E[Y|X]](=E[h(X)])=E[Y]$
+\end_inset
+
+ (
+\series bold
+law of total expectation
+\series default
+).
+\end_layout
+
+\begin_layout Standard
+There is also a 
+\series bold
+law of total variance
+\series default
+: 
+\begin_inset Formula $V(Y)=V(E(Y|X))+E(V(Y|X)),$
+\end_inset
+
+ where 
+\begin_inset Formula $V(Y|X)=E[Y^{2}|X]-(E[Y|X]^{2}).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Rao-Blackwell theorem
+\end_layout
+
+\begin_layout Standard
+This theorem allows us to start with an unbiased estimator 
+\begin_inset Formula $\tilde{\theta}=g(Y_{1},...,Y_{n})$
+\end_inset
+
+ for 
+\begin_inset Formula $\theta$
+\end_inset
+
+, and a sufficient statistic 
+\begin_inset Formula $T=\tau(Y_{1},...,Y_{n})$
+\end_inset
+
+ for 
+\begin_inset Formula $\theta$
+\end_inset
+
+, and combine them to get an unbiased estimator with a variance for each
+ value of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ that is guaranteed to be smaller than that of the original estimator.
+ We do this by conditioning the estimator on 
+\begin_inset Formula $T$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\hat{\theta}=E[\tilde{\theta}|T].
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then the Rao-Blackwell theorem states: 1.
+ 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ is unbiased for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ due to the law of total expectation, 2.
+ 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ depends only on the sample data (in fact on the sufficient statistic) and
+ does not involve 
+\begin_inset Formula $\theta$
+\end_inset
+
+, and 3.
+ the variance of 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ is less than that of 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ (this follows from the law of total variance).
+\end_layout
+
+\begin_layout Section
+Examples
+\end_layout
+
+\begin_layout Subsection
+Example 1: two i.i.d exponential r.vs
+\end_layout
+
+\begin_layout Standard
+(This example is from Mary Meyer's unpublished textbook, 
+\emph on
+Probability and Statistics
+\emph default
+)
+\emph on
+.
+\end_layout
+
+\begin_layout Standard
+What if you have two i.i.d.
+ exponential random variables, 
+\begin_inset Formula $Y_{1},Y_{2}$
+\end_inset
+
+, and want to estimate their mean parameter
+\begin_inset Formula $\theta?$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can start by considering just the random variable 
+\begin_inset Formula $\tilde{\theta}=Y_{1}^{2}/2$
+\end_inset
+
+, which is unbiased for 
+\begin_inset Formula $\theta$
+\end_inset
+
+, and has variance 
+\begin_inset Formula $V(\tilde{\theta})=V(Y_{1}^{2})/4=5\theta^{4}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+But Rao-Blackwell says that you can condition 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ on the sufficient statistic 
+\begin_inset Formula $S_{2}=Y_{1}+Y_{2}$
+\end_inset
+
+and get an unbiased estimator for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ with a lower variance.
+\end_layout
+
+\begin_layout Standard
+We have already shown that 
+\begin_inset Formula $f(y_{1}|s)=\frac{1}{s}I(0\le y_{1}\le s)$
+\end_inset
+
+, and therefore
+\begin_inset Formula $E(Y_{1}^{2}|S_{2}=s)=\int y_{1}^{2}f(y_{1}|s)dy_{1}=s^{2}/3$
+\end_inset
+
+.
+ So by definition 
+\begin_inset Formula $E(Y_{1}^{2}|S_{2})=S_{2}^{2}/3$
+\end_inset
+
+ and 
+\begin_inset Formula $E(\tilde{\theta}|S_{2})=E(Y_{1}^{2}/2|S_{2})=S_{2}^{2}/6$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $E(\tilde{\theta}|S_{2})$
+\end_inset
+
+ is unbiased for 
+\begin_inset Formula $\theta$
+\end_inset
+
+, since 
+\begin_inset Formula $E(S_{2}^{2})=6\theta^{2}$
+\end_inset
+
+ (see section 5.3 on calculating expected values of powers of 
+\begin_inset Formula $S_{n}$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $E(\tilde{\theta}|S_{2})$
+\end_inset
+
+ clearly does not involve the parameter 
+\begin_inset Formula $\theta$
+\end_inset
+
+, and is only a function of the sufficient statistic.
+\end_layout
+
+\begin_layout Standard
+Finally 
+\begin_inset Formula $V(E[\tilde{\theta}|S_{2}])=V(S_{2}^{2}/6)=\frac{1}{36}[E(S_{2}^{4})-E(S_{2}^{2})^{2}]=84/36\theta^{4}=\frac{7}{3}\theta^{4}.$
+\end_inset
+
+ This is a lower variance than that of the unconditioned estimator 
+\begin_inset Formula $\tilde{\theta}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Example 2: 
+\emph on
+three
+\emph default
+ i.i.d.
+ exponential r.v.s
+\end_layout
+
+\begin_layout Standard
+Intuition says that if you have three i.i.d.
+ exponential random variables to work with, then you should be able to estimate
+ their parameter 
+\begin_inset Formula $\theta$
+\end_inset
+
+ with a lower-variance estimator than if you have only two or one.
+ 
+\end_layout
+
+\begin_layout Standard
+Suppose you have 
+\begin_inset Formula $Y_{1},Y_{2},Y_{3}.$
+\end_inset
+
+ You start off with the same random variable, 
+\begin_inset Formula $\tilde{\theta}=Y_{1}^{2}/2,$
+\end_inset
+
+ and condition it on 
+\begin_inset Formula $S_{3}=Y_{1}+Y_{2}+Y_{3}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First we must calculate the conditional density: 
+\begin_inset Formula 
+\[
+f(y_{1},y_{2}|s)=f(y_{1},y_{2},s-y_{1}-y_{2})/f(s)=\frac{2}{s^{2}}\cdot I(0\le y_{1},0\le y_{2},y_{1}+y_{2}\le s)
+\]
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then we marginalize out 
+\begin_inset Formula $y_{2}$
+\end_inset
+
+ to get 
+\begin_inset Formula 
+\[
+f(y_{1}|s)=\int f(y_{1},y_{2}|s)dy_{2}=\frac{2}{s^{2}}\int_{0}^{s}I(0\le y_{1},0\le y_{2},y_{1}+y_{2}\le s)dy_{2}=\frac{2}{s^{2}}\cdot I(0\le y_{1}\le s)\cdot\int_{0}^{s-y_{1}}dy_{2}=\frac{2(s-y_{1})}{s^{2}}\cdot I(0\le y_{1}\le s)
+\]
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+With this conditional density, calculate 
+\begin_inset Formula 
+\[
+E(Y_{1}^{2}|S_{3}=s)=\int y_{1}^{2}f(y_{1}|s)dy_{1}=\frac{2}{s^{2}}\int_{0}^{s}y_{1}^{2}(s-y_{1})dy_{1}=\frac{2}{s^{2}}(\frac{s^{4}}{3}-\frac{s^{4}}{4})=\frac{s^{2}}{6}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, our candidate Rao-Blackwellized estimator is 
+\begin_inset Formula $E((Y_{1}^{2}/2)|S_{3})=S_{3}^{2}/12.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, we want to show it has lower variance than 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+.
+ We have
+\begin_inset Formula 
+\[
+V(S_{3}^{2}/12)=\frac{1}{144}(E[S_{3}^{4}]-E[S_{3}^{2}]^{2})=\frac{1}{144}(360\cdot\theta^{4}-144\cdot\theta^{4})=\frac{216}{144}\theta^{4}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(see the next section for details on calculating the expected values in
+ this expression).
+ Notice that the unconditioned variance of 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ was 
+\begin_inset Formula $5\theta^{4};$
+\end_inset
+
+ the variance of 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ conditioned on 
+\begin_inset Formula $S=Y_{1}+Y_{2}$
+\end_inset
+
+ was 
+\begin_inset Formula $\frac{7\theta^{4}}{3}$
+\end_inset
+
+; and the variance of 
+\begin_inset Formula $\tilde{\theta}$
+\end_inset
+
+ conditioned on 
+\begin_inset Formula $S=Y_{1}+Y_{2}+Y_{3}$
+\end_inset
+
+ is less than 
+\begin_inset Formula $2\theta^{4}.$
+\end_inset
+
+ The variance of the estimators seems to be dropping as we condition on
+ more data.
+\end_layout
+
+\begin_layout Subsection
+Calculating the expected value of powers of 
+\begin_inset Formula $S_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When 
+\begin_inset Formula $S_{n}=Y_{1}+Y_{2}+...+Y_{n}$
+\end_inset
+
+ is a sum of i.i.d.
+ exponential random variables, there is a neat trick to calculating the
+ expected value of powers of 
+\begin_inset Formula $S_{n}.$
+\end_inset
+
+ It follows from the fact that the integrands of 
+\begin_inset Formula $E[S_{n}^{k}]$
+\end_inset
+
+ have the form 
+\begin_inset Formula $g(s)\propto s^{n+k-1}e^{\frac{1}{\theta}},$
+\end_inset
+
+ which is the functional portion of the Gamma
+\begin_inset Formula $(n+k,\frac{1}{\theta})$
+\end_inset
+
+ random variable.
+ Thus we have 
+\begin_inset Formula 
+\[
+\int_{0}^{\infty}s^{n+k-1}e^{\frac{-s}{\theta}}=(n+k-1)!\theta^{n+k}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For example, consider
+\begin_inset Formula $E[S_{3}^{4}]$
+\end_inset
+
+.
+ 
+\begin_inset Formula $S_{3}$
+\end_inset
+
+ is Gamma(3,
+\begin_inset Formula $1/\theta$
+\end_inset
+
+), so its p.d.f.
+ is
+\begin_inset Formula $f(s)=\frac{1}{2\theta^{3}}s^{2}e^{\frac{-s}{\theta}}$
+\end_inset
+
+.
+ It follows that 
+\begin_inset Formula 
+\[
+E[S_{3}^{4}]=\frac{1}{2\theta^{3}}\int s^{4}\cdot s^{2}e^{-s/\theta}ds=\frac{1}{2\theta^{3}}\int s^{6}e^{-s/\theta}ds.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that the integrand 
+\begin_inset Formula $s^{6}e^{\frac{-s}{\theta}}$
+\end_inset
+
+ is the functional part of the distribution Gamma(7,
+\begin_inset Formula $1/\theta$
+\end_inset
+
+).
+ Since 
+\begin_inset Formula $\frac{1}{6!\theta^{7}}\int s^{6}e^{-\frac{s}{\theta}}ds=1$
+\end_inset
+
+, it follows that 
+\begin_inset Formula $\int s^{6}e^{-\frac{s}{\theta}}ds=6!\theta^{7}$
+\end_inset
+
+, and so 
+\begin_inset Formula 
+\[
+E[S_{3}^{4}]=\frac{1}{2\theta^{3}}\theta^{7}\cdot6!=360\theta^{4}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The Lehmann-Scheffe theorem
+\end_layout
+
+\begin_layout Standard
+You might have noticed that Rao-Blackwellizing the estimator 
+\begin_inset Formula $Y_{1}^{2}/2$
+\end_inset
+
+ to get 
+\begin_inset Formula $S_{3}^{2}/12$
+\end_inset
+
+ was a bit of overkill.
+ All we have to do is notice that 
+\begin_inset Formula $E[S_{3}^{2}]=12\theta^{2}$
+\end_inset
+
+ and we would have realized that 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $S_{3}^{2}/12$
+\end_inset
+
+ was an unbiased estimator.
+ But would it have minimal variance? 
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+It turns out that it would.
+ By the Lehmann-Scheffe theorem, an unbiased estimator of 
+\begin_inset Formula $f(\theta)$
+\end_inset
+
+ that is a function of a sufficient statistic for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is guaranteed to have the minimum possible variance for all values of 
+\begin_inset Formula $\theta$
+\end_inset
+
+, i.e., to be UMVUE (Uniformly Minimum Variance Unbiased Estimator).
+ This works for almost any sufficient statistic.
+ The exceptions are those sufficient statistics that are not 
+\family default
+\series default
+\shape default
+\size default
+\emph on
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+complete
+\emph default
+, and those are corner cases that you have to work to construct.
+\end_layout
+
+\begin_layout Standard
+So don't Rao-Blackwellize an estimator; find a complete sufficient statistic
+ 
+\begin_inset Formula $S$
+\end_inset
+
+ for your parameter, and find a function of it (not involving 
+\begin_inset Formula $\theta)$
+\end_inset
+
+ that gives an unbiased estimator for 
+\begin_inset Formula $f(\theta).$
+\end_inset
+
+ It is guaranteed to be UMVUE.
+ 
+\end_layout
+
+\end_body
+\end_document
