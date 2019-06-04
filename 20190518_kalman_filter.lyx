@@ -81,7 +81,7 @@ Bayes Filters
 \end_layout
 
 \begin_layout Standard
-This writeup follows the form of that in 
+This writeup closely follows the form of that in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"
@@ -307,10 +307,6 @@ Sensor measurements
 \begin_inset Formula $z_{t}$
 \end_inset
 
- at each time 
-\begin_inset Formula $t$
-\end_inset
-
 ;
 \end_layout
 
@@ -319,16 +315,12 @@ Control measurements
 \begin_inset Formula $u_{t}$
 \end_inset
 
- at each time
-\begin_inset Formula $t$
-\end_inset
-
 ;
 \end_layout
 
 \begin_layout Enumerate
 The p.d.f.
- of sensor measurements at each time 
+ of sensor measurements at time 
 \begin_inset Formula $t$
 \end_inset
 
@@ -349,7 +341,7 @@ sensor model
 
 \begin_layout Enumerate
 The p.d.f.
- of the state vector at each time 
+ of the state vector at time 
 \begin_inset Formula $t$
 \end_inset
 
@@ -367,7 +359,7 @@ The p.d.f.
 
  (this is called the 
 \emph on
-process model
+transition model
 \emph default
 ).
 \end_layout
@@ -411,7 +403,7 @@ Next, assume that we are given
 \begin_inset Formula $f(z_{T}|x_{T})$
 \end_inset
 
-, and the process transition model 
+, and the transition model 
 \begin_inset Formula $f(x_{T}|x_{T-1},u_{T}).$
 \end_inset
 
@@ -592,7 +584,7 @@ i.e., the p.d.f.
 \begin_inset Formula $x_{T-1}$
 \end_inset
 
-at time step 
+ at time step 
 \begin_inset Formula $T-1$
 \end_inset
 
@@ -600,7 +592,7 @@ at time step
 \begin_inset Formula $u_{T},$
 \end_inset
 
- the control at time
+ the control at time 
 \begin_inset Formula $T$
 \end_inset
 
@@ -893,7 +885,7 @@ Now, suppose that
 \end_inset
 
 .
- From 
+ From equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:bayes-step2"
@@ -920,8 +912,15 @@ reference "eq:bayes-step2"
 \end_layout
 
 \begin_layout Standard
-The result for the prediction step follows from the convolution theorem
- for Gaussians, proven at the end of this article, with substitutions 
+The result for the prediction step follows directly from the convolution
+ theorem for Gaussians, proven in Section 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "sec:A-convolution-theorem"
+
+\end_inset
+
+, with substitutions 
 \begin_inset Formula $x=x_{t}$
 \end_inset
 
@@ -952,7 +951,7 @@ The result for the prediction step follows from the convolution theorem
  
 \begin_inset Formula 
 \[
-\overline{bel}(x_{t})\sim N(A_{t}\mu_{t-1}+B_{t}u_{t},A_{t}\Sigma_{t-1}A_{t}^{T}+R_{t}).
+\overline{bel}(x_{t})\sim N(A_{t}\mu_{t-1}+B_{t}u_{t},A_{t}\Sigma_{t-1}A_{t}^{T}+R_{t})=N(\overline{\mu}_{t},\overline{\Sigma}_{t}).
 \]
 
 \end_inset
@@ -989,15 +988,399 @@ through the linear function
 \begin_inset Formula $\epsilon_{t}.$
 \end_inset
 
+ 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
 
+ is a multivariate Gaussian with parameters 
+\begin_inset Formula $\overline{\mu_{t}}=A_{t}\mu_{t-1}+B_{t}u_{t}$
+\end_inset
+
+, and 
+\begin_inset Formula $\overline{\Sigma}_{t}=A_{t}\Sigma_{t-1}A_{t}^{T}+R_{t}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
 Derivation of the update step of the Kalman filter
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:update-derivation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+According to the definition of the update step for Bayes filters, 
+\begin_inset Formula 
+\[
+bel(x_{t})=\eta p(z_{t}|x_{t})\overline{bel}(x_{t}),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\eta$
+\end_inset
+
+ is a constant with respect to 
+\begin_inset Formula $x_{t}.$
+\end_inset
+
+ From the prediction step, we have 
+\begin_inset Formula $\overline{bel}(x_{t})\sim N(\overline{\mu}_{t},\overline{\Sigma_{t}}$
+\end_inset
+
+).
+ We are given 
+\begin_inset Formula $p(z_{t}|x_{t})\sim N(C_{t}x_{t},Q_{t}).$
+\end_inset
+
+ The product is given by 
+\begin_inset Formula $bel(x_{t})=\eta\text{exp(}-J_{t}),$
+\end_inset
+
+ with
+\begin_inset Formula 
+\[
+J_{t}=\frac{1}{2}[(z_{t}-C_{t}x_{t})^{T}Q_{t}^{-1}(z_{t}-C_{t}x_{t})+(x_{t}-\overline{\mu}_{t})^{T}\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t})].
+\]
+
+\end_inset
+
+This expression is quadratic in 
+\begin_inset Formula $x_{t},$
+\end_inset
+
+ and so 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ is a Gaussian.
+ To determine its parameters, we calculate the first two derivatives with
+ respect to 
+\begin_inset Formula $x_{t}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have 
+\begin_inset Formula 
+\begin{equation}
+\frac{dJ_{t}}{dx_{t}}=-C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}x_{t})+\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t}).\label{eq:dJ_dxt}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula 
+\begin{equation}
+\frac{d^{2}J_{t}}{dx_{t}^{2}}=C_{t}^{T}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1}.\label{eq:d2J_dx2}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:d2J_dx2"
+
+\end_inset
+
+, the covariance of 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\begin{equation}
+\Sigma_{t}=(C_{t}^{T}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1})^{-1}.\label{eq:Sigma_t}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To find the mean of 
+\begin_inset Formula $bel(x_{t}),$
+\end_inset
+
+ we solve
+\begin_inset Formula 
+\begin{equation}
+\frac{dJ_{t}}{dx_{t}}=-C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}x_{t})+\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t})=0.\label{eq:dJ_dt_is_0}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is easy enough, but it is traditional to massage the solution 
+\begin_inset Formula $\mu_{t}$
+\end_inset
+
+ so that it is in the form 
+\begin_inset Formula 
+\[
+\mu_{t}=\overline{\mu}_{t}+K_{t}(z_{t}-C_{t}\overline{\mu}_{t}),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for 
+\begin_inset Formula $K_{t}$
+\end_inset
+
+ some matrix.
+ This expresses the mean as the sum of the prediction mean, 
+\begin_inset Formula $\overline{\mu}_{t}$
+\end_inset
+
+, and the difference of the sensor measurement and the predicted sensor
+ measurement, 
+\begin_inset Formula $z_{t}-C_{t}\overline{\mu}_{t}$
+\end_inset
+
+, weighted by 
+\begin_inset Formula $K_{t}.$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+To do the massaging, notice that equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:dJ_dt_is_0"
+
+\end_inset
+
+ implies that 
+\begin_inset Formula 
+\[
+C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}x_{t})=\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We add 
+\begin_inset Formula $0=C_{t}\overline{\mu}_{t}-C_{t}\overline{\mu}_{t}$
+\end_inset
+
+ to the left hand side argument to get
+\begin_inset Formula 
+\[
+C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}\overline{\mu}_{t}+C_{t}\overline{\mu}_{t}-C_{t}x_{t})=\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t})
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\implies C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}\overline{\mu}_{t})=(C_{t}^{T}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1})(x_{t}-\overline{\mu}_{t})=\Sigma_{t}^{-1}(x_{t}-\overline{\mu}_{t}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It follows that 
+\begin_inset Formula 
+\[
+x_{t}=\overline{\mu}_{t}+\Sigma_{t}C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}\overline{\mu}_{t}),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+is the solution of equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:dJ_dt_is_0"
+
+\end_inset
+
+, and therefore we have 
+\begin_inset Formula 
+\begin{equation}
+\mu_{t}=\overline{\mu}_{t}+\Sigma_{t}C_{t}^{T}Q_{t}^{-1}(z_{t}-C_{t}\overline{\mu}_{t})=\overline{\mu}_{t}+K_{t}(z_{t}-C_{t}\overline{\mu}_{t}),\label{eq:mean_of_bel}
+\end{equation}
+
+\end_inset
+
+with weight matrix 
+\begin_inset Formula $K_{t}=\Sigma_{t}C_{t}^{T}Q_{t}^{-1}.$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+It also turns out, after more manipulation (shown in Section 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "sec:Deriving-the-Kalman"
+
+\end_inset
+
+), that 
+\begin_inset Formula 
+\begin{equation}
+K_{t}=\overline{\Sigma}_{t}C_{t}^{T}(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1},\label{eq:K_t_from_Sigma_bar}
+\end{equation}
+
+\end_inset
+
+ and (using the Woodbury identity) that 
+\begin_inset Formula 
+\[
+\Sigma_{t}=(I-K_{t}C_{t})\overline{\Sigma}_{t}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that in the expression 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:K_t_from_Sigma_bar"
+
+\end_inset
+
+ , the weight given by 
+\begin_inset Formula $\overline{\Sigma_{t}}$
+\end_inset
+
+ is offset by that of 
+\begin_inset Formula $C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t}$
+\end_inset
+
+.
+ If the sensor noise 
+\begin_inset Formula $Q_{t}$
+\end_inset
+
+ is large with respect to the transition noise 
+\begin_inset Formula $\overline{\Sigma}_{t}$
+\end_inset
+
+, then 
+\begin_inset Formula $(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1}$
+\end_inset
+
+ (therefore 
+\begin_inset Formula $K_{t})$
+\end_inset
+
+ is small compared to 
+\begin_inset Formula $\overline{\Sigma_{t}}$
+\end_inset
+
+.
+ Thus the effect of the measurement offset 
+\begin_inset Formula $(z_{t}-C_{t}\overline{\mu}_{t})$
+\end_inset
+
+ is reduced relative to that of the predicted mean 
+\begin_inset Formula $\overline{\mu}.$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Conversely, if 
+\begin_inset Formula $Q_{t}$
+\end_inset
+
+ is small with respect to 
+\begin_inset Formula $\overline{\Sigma}_{t}$
+\end_inset
+
+, then 
+\begin_inset Formula $(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1}\approx(C_{t}\overline{\Sigma}_{t}C_{t}^{T})^{-1}$
+\end_inset
+
+, and so 
+\begin_inset Formula $C_{t}K_{t}\approx C_{t}\overline{\Sigma}_{t}C_{t}^{T}(C_{t}\overline{\Sigma}_{t}C_{t}^{T})^{-1}=I.$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+It follows that 
+\begin_inset Formula 
+\[
+C_{t}\mu_{t}=C_{t}\overline{\mu_{t}}+C_{t}K_{t}(z_{t}-C_{t}\overline{\mu_{t}})\approx C_{t}\overline{\mu}_{t}+I(z_{t}-C_{t}\overline{\mu}_{t})=z_{t},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+so that the mean 
+\begin_inset Formula $\mu_{t}$
+\end_inset
+
+ of 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ respects the more accurate sensor measurement.
 \end_layout
 
 \begin_layout Section
 A convolution theorem for Gaussians
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:A-convolution-theorem"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1248,7 +1631,7 @@ Solving
 \begin_inset Formula $\frac{dk(x,y)}{dy}=0$
 \end_inset
 
- for the constant term
+ for the constant term 
 \begin_inset Formula $u(x)$
 \end_inset
 
@@ -1507,7 +1890,7 @@ and
 \end_layout
 
 \begin_layout Quote
-Making these substitutions in 
+Making these substitutions in equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:mess"
@@ -1590,6 +1973,214 @@ again using the Woodbury identity.
  This completes the proof of the convolution identity.
 \end_layout
 
+\begin_layout Section
+Deriving the Kalman gain expressions 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Deriving-the-Kalman"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In Section 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "sec:update-derivation"
+
+\end_inset
+
+, we stated that the Kalman gain 
+\begin_inset Formula $K_{t}=\Sigma_{t}C_{t}^{T}Q_{t}^{-1}$
+\end_inset
+
+ could be rewritten in terms of 
+\begin_inset Formula $\overline{\Sigma}_{t}$
+\end_inset
+
+ as 
+\begin_inset Formula $K_{t}=\overline{\Sigma}_{t}C_{t}^{T}(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1}$
+\end_inset
+
+, and that we could write 
+\begin_inset Formula $\Sigma_{t}$
+\end_inset
+
+ as 
+\begin_inset Formula $(I-K_{t}C_{t})\overline{\Sigma}_{t}.$
+\end_inset
+
+ In this section I reproduce those calculations from Chapter 3.2 in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+First, we show how we can express 
+\begin_inset Formula $K_{t}$
+\end_inset
+
+ without using 
+\begin_inset Formula $\Sigma_{t}$
+\end_inset
+
+.
+ We start with 
+\begin_inset Formula 
+\[
+K_{t}=\Sigma_{t}C_{t}^{t}Q_{t}^{-1}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=[\Sigma_{t}C_{t}^{t}Q_{t}^{-1}(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})](C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1},
+\]
+
+\end_inset
+
+where we have multiplied by the identity 
+\begin_inset Formula $(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1}$
+\end_inset
+
+ on the right.
+\end_layout
+
+\begin_layout Standard
+Multiplying out the expression in brackets on the left of this expression
+ gives:
+\begin_inset Formula 
+\[
+\Sigma_{t}C_{t}^{t}Q_{t}^{-1}(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})=\Sigma_{t}(C_{t}^{t}Q_{t}^{-1}C_{t}\overline{\Sigma}_{t}C_{t}^{T}+C_{t}^{t}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The goal of the exercise now is to get rid of the 
+\begin_inset Formula $\Sigma_{t}$
+\end_inset
+
+ on the left.
+ We do this by 
+\begin_inset Quotes eld
+\end_inset
+
+pulling out
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula $\Sigma_{t}^{-1}$
+\end_inset
+
+ from the expression in parentheses, so that it cancels 
+\begin_inset Formula $\Sigma_{t}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall from equation 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:Sigma_t"
+
+\end_inset
+
+ that 
+\begin_inset Formula $\Sigma_{t}^{-1}=C_{t}^{T}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1}$
+\end_inset
+
+.
+ It follows that
+\begin_inset Formula 
+\[
+\Sigma_{t}(C_{t}^{t}Q_{t}^{-1}C_{t}\overline{\Sigma}_{t}C_{t}^{T}+C_{t}^{t})=\Sigma_{t}(C_{t}^{t}Q_{t}^{-1}C_{t}\overline{\Sigma}_{t}C_{t}^{T}+\overline{(\Sigma}_{t}^{-1}\overline{\Sigma}_{t})C_{t}^{t})
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=\Sigma_{t}(C_{t}^{t}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1})\cdot(\overline{\Sigma}_{t}C_{t}^{t})=\Sigma_{t}\Sigma_{t}^{-1}\overline{\Sigma}_{t}C_{t}^{t}=\overline{\Sigma}_{t}C_{t}^{t}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This shows that 
+\begin_inset Formula 
+\begin{equation}
+K_{t}=\overline{\Sigma}_{t}C_{t}^{t}(C_{t}\overline{\Sigma}_{t}C_{t}^{T}+Q_{t})^{-1}.\label{eq:kalman-gain-eq}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Second, we show that 
+\begin_inset Formula $\Sigma_{t}=(I-K_{t}C_{t})\overline{\Sigma}_{t}$
+\end_inset
+
+.
+ We have
+\begin_inset Formula 
+\[
+\Sigma_{t}=(C_{t}^{T}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1})^{-1}.
+\]
+
+\end_inset
+
+ From the Woodbury Identity, we have 
+\begin_inset Formula 
+\[
+\Sigma_{t}=(C_{t}^{T}Q_{t}^{-1}C_{t}+\overline{\Sigma}_{t}^{-1})^{-1}=\overline{\Sigma}_{t}-\overline{\Sigma}_{t}C_{t}^{t}(Q_{t}+C_{t}\overline{\Sigma}_{t}C_{t}^{t})^{-1}C_{t}\overline{\Sigma}_{t}.
+\]
+
+\end_inset
+
+Factoring out 
+\begin_inset Formula $\overline{\Sigma}_{t}$
+\end_inset
+
+ on the right, and using equation 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:kalman-gain-eq"
+
+\end_inset
+
+ gives the result:
+\begin_inset Formula 
+\[
+\Sigma_{t}=(I-\overline{\Sigma}_{t}C_{t}^{t}(Q_{t}+C_{t}\overline{\Sigma}_{t}C_{t}^{t})^{-1}C_{t})\cdot\overline{\Sigma}_{t}=(I-K_{t}C_{t})\overline{\Sigma}_{t}.
+\]
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
@@ -1598,7 +2189,7 @@ key "key-1"
 
 \end_inset
 
-Thrun, S., Burgard, W., Fox, D.
+ Thrun, S., Burgard, W., Fox, D.
  
 \emph on
 Probabilistic Robotics.
