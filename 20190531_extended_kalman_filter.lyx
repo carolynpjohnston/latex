@@ -1,0 +1,860 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+The Extended Kalman filter
+\end_layout
+
+\begin_layout Author
+Carolyn Johnston
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The Kalman filter makes a lot of assumptions; in addition to the basic Bayes
+ filter assumptions (of, for example, Markovianness of the process), it
+ assumes:
+\end_layout
+
+\begin_layout Enumerate
+The prior 
+\begin_inset Formula $f(x_{0})$
+\end_inset
+
+ is a multivariate Gaussian in the state vector 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Enumerate
+For each time step, the state transition equation must be linear in its
+ arguments 
+\begin_inset Formula $x_{t-1}$
+\end_inset
+
+ and 
+\begin_inset Formula $u_{t}$
+\end_inset
+
+, with additive mean-zero Gaussian noise 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+x_{t}=A_{t}x_{t-1}+B_{t}u_{u}+\epsilon_{t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+For each time step, the sensor equation must be linear in its argument 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ with additive mean-zero Gaussian noise 
+\begin_inset Formula $\delta_{t}:$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+z_{t}=C_{t}x_{t}+\delta_{t}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For most real-world systems, conditions 2 and 3 are violated; neither the
+ motion model nor the sensor model are linear in their arguments.
+ As a result, the predicted and corrected beliefs 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
+
+ and
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ are usually not Gaussian, as passing a set of points from a Gaussian distributi
+on through a nonlinear function does not preserve Gaussianness.
+ 
+\end_layout
+
+\begin_layout Standard
+In the Extended Kalman Filter (EKF) method, the state transition probability
+ is assumed to be governed by a nonlinear function of 
+\begin_inset Formula $x_{t-1}$
+\end_inset
+
+, plus additive Gaussian noise:
+\begin_inset Formula 
+\begin{equation}
+x_{t}=g(u_{t},x_{t-1})+\epsilon_{t},\label{eq:ekf_state_eq}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the measurement probability is assumed to be governed by a nonlinear
+ function of 
+\begin_inset Formula $x_{t},$
+\end_inset
+
+ plus additive Gaussian noise:
+\begin_inset Formula 
+\begin{equation}
+z_{t}=h(x_{t})+\delta_{t}.\label{eq:ekf_meas_eq}
+\end{equation}
+
+\end_inset
+
+The EKF is obtained by replacing these nonlinear functions with a linear
+ function at each step of the algorithm.
+ As a result of this, the posterior beliefs remain Gaussian, and so the
+ EKF is ill-suited for problems in which the posterior probabilities are
+ not well represented by Gaussians.
+ For example, multimodal beliefs occur frequently in robotics problems and
+ are completely unrepresentable with Gaussians.
+ The EKF is well suited for problems in which the bulk of the prior belief
+ 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ lies in a near-linear portion of the nonlinear function 
+\begin_inset Formula $g(u_{t},x_{t-1})$
+\end_inset
+
+, and the bulk of 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
+
+ lies in a near-linear portion of 
+\begin_inset Formula $h(x_{t}).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+The EKF prediction and update steps
+\end_layout
+
+\begin_layout Standard
+In the EKF, we begin by assuming that the prior 
+\begin_inset Formula $bel(x_{0})$
+\end_inset
+
+ is a Gaussian, and that for each time step, equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ekf_state_eq"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ekf_meas_eq"
+
+\end_inset
+
+ hold.
+ The functions 
+\begin_inset Formula $g$
+\end_inset
+
+ and 
+\begin_inset Formula $h$
+\end_inset
+
+ will be linearized using first-order Taylor expansions.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Calculating 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Think of the function 
+\begin_inset Formula $g(u_{t},x_{t-1})$
+\end_inset
+
+ as though 
+\begin_inset Formula $u_{t}$
+\end_inset
+
+ were a constant: 
+\begin_inset Formula $g(u_{t,}x_{t-1})\equiv g_{u_{t}}(x_{t-1})$
+\end_inset
+
+.
+ The function 
+\begin_inset Formula $g_{u_{t}}$
+\end_inset
+
+ maps 
+\begin_inset Formula $R^{N}$
+\end_inset
+
+ to 
+\begin_inset Formula $R^{N}$
+\end_inset
+
+, where 
+\begin_inset Formula $N$
+\end_inset
+
+ is the dimension of the state space, and therefore its Jacobian (derivative)
+ at a point 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is an 
+\begin_inset Formula $NxN$
+\end_inset
+
+ matrix, defined by:
+\begin_inset Formula 
+\begin{equation}
+[G_{t}|_{x_{0}}]_{ij}=[\left.\frac{\delta(g_{u_{t}})_{j}}{\delta x_{i}}\right|_{x_{0}}];\label{eq:matrix_gt}
+\end{equation}
+
+\end_inset
+
+i.e., the derivative matrix consists of gradient vectors of each component
+ of the vector function 
+\begin_inset Formula $g_{u_{t}}$
+\end_inset
+
+ arranged in columns.
+ 
+\end_layout
+
+\begin_layout Standard
+In the equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ekf_state_eq"
+
+\end_inset
+
+, the state 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ is given by the function 
+\begin_inset Formula $g_{u_{t}}(x_{t})$
+\end_inset
+
+ plus a noise term 
+\begin_inset Formula $\epsilon_{t}.$
+\end_inset
+
+ In order to define a Taylor expansion for the estimate, we must choose
+ a representative point 
+\begin_inset Formula $x_{t-1}\equiv x_{0}$
+\end_inset
+
+ in the domain of 
+\begin_inset Formula $bel(x_{t-1})$
+\end_inset
+
+ to expand the function 
+\begin_inset Formula $g_{u_{t}}$
+\end_inset
+
+ around.
+ This point should be central to the support of 
+\begin_inset Formula $bel(x_{t-1}),$
+\end_inset
+
+ since that represents our best knowledge about the state at time 
+\begin_inset Formula $t-1$
+\end_inset
+
+.
+ Since the prior belief 
+\begin_inset Formula $bel(x_{t-1})$
+\end_inset
+
+ is assumed to be Gaussian, 
+\begin_inset Formula $bel(x_{t-1})\sim N(\mu_{t-1},\Sigma_{t-1})$
+\end_inset
+
+, we take 
+\begin_inset Formula $\mu_{t-1}$
+\end_inset
+
+ to be the representative point for the Taylor expansion.
+ We therefore approximate 
+\begin_inset Formula $g_{u_{t}}$
+\end_inset
+
+by the linear function
+\begin_inset Formula 
+\[
+g_{u_{t}}(x_{t-1})\approx g_{u_{t}}(\mu_{t-1})+\left.G_{t}\right|_{\mu_{t-1}}\cdot(x_{t-1}-\mu_{t-1}),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $G_{t}$
+\end_inset
+
+ is the 
+\begin_inset Formula $NxN$
+\end_inset
+
+ matrix given in equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:matrix_gt"
+
+\end_inset
+
+.
+ This approximation should be valid in most of the domain of 
+\begin_inset Formula $bel(x_{t-1})$
+\end_inset
+
+ for the EKF to give good results.
+ 
+\end_layout
+
+\begin_layout Standard
+With this approximation, we get the Gaussian predicted belief 
+\begin_inset Formula 
+\[
+p(x_{t}|u_{t},x_{t-1})\propto\text{exp}(-\frac{1}{2}(x_{t}-[g_{u_{t}}(\mu_{t-1})+\left.G_{t}\right|_{\mu_{t-1}}\cdot(x_{t-1}-\mu_{t-1})])^{t}R_{t}^{-1}(x_{t}-[g_{u_{t}}(\mu_{t-1})+\left.G_{t}\right|_{\mu_{t-1}}\cdot(x_{t-1}-\mu_{t-1})]),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $R_{t}$
+\end_inset
+
+ is the covariance of the noise term 
+\begin_inset Formula $\epsilon_{t}$
+\end_inset
+
+.
+ It follows from the Bayes filter prediction step that
+\begin_inset Formula 
+\[
+\overline{bel}(x_{t})=\int p(x_{t}|u_{t},x_{t-1})\cdot bel(x_{t-1})dx_{t-1}\propto
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\int\text{exp}(-\frac{1}{2}(x_{t}-[g_{u_{t}}(\mu_{t-1})+\left.G_{t}\right|_{\mu_{t-1}}\cdot(x_{t-1}-\mu_{t-1})])^{t}R_{t}^{-1}(x_{t}-[g_{u_{t}}(\mu_{t-1})+\left.G_{t}\right|_{\mu_{t-1}}\cdot(x_{t-1}-\mu_{t-1})])\cdot\text{exp}(-\frac{1}{2}(x_{t-1}-\mu_{t-1})^{t}\Sigma_{t-1}^{-1}(x_{t-1}-\mu_{t-1}))dx_{t-1}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This can be calculated using the result of the Convolution Theorem from
+ the previous chapter on Kalman filters, which is restated here:
+\end_layout
+
+\begin_layout Quote
+\begin_inset Formula 
+\[
+f(x)=\int\text{exp}(-\frac{1}{2}[(x-Ay-w)^{T}R^{-1}(x-Ay-w)+(y-\mu)^{T}\Sigma^{-1}(y-\mu)]dy
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\implies f(x)\sim N(A\mu+w,A\Sigma A^{T}+R).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Quote
+The result is obtained by setting 
+\begin_inset Formula $x=x_{t}$
+\end_inset
+
+, 
+\begin_inset Formula $y=x_{t-1},$
+\end_inset
+
+ 
+\begin_inset Formula $A=\left.G_{t}\right|_{\mu_{t-1}},$
+\end_inset
+
+ 
+\begin_inset Formula $w=g(u_{t},\mu_{t-1})-\left.G_{t}\right|_{\mu_{t-1}}\mu_{t-1},$
+\end_inset
+
+ 
+\begin_inset Formula $\mu=\mu_{t-1},$
+\end_inset
+
+ 
+\begin_inset Formula $R=R_{t},$
+\end_inset
+
+ and 
+\begin_inset Formula $\Sigma=\Sigma_{t-1}.$
+\end_inset
+
+ We end up with
+\begin_inset Formula 
+\begin{equation}
+\overline{bel}(x_{t})\sim N(g(u_{t},\mu_{t-1}),\left.G_{t}\right|_{\mu_{t-1}}^{t}\Sigma_{t-1}\left.G_{t}\right|_{\mu_{t-1}}+R_{t}).\label{eq:ekf_pred_bel}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Quote
+Thus 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
+
+ is estimated as a Gaussian with mean 
+\begin_inset Formula $\overline{\mu}_{t}=g(u_{t},\mu_{t-1})$
+\end_inset
+
+, and covariance 
+\begin_inset Formula $\overline{\Sigma_{t}}=\left.G_{t}\right|_{\mu_{t-1}}^{t}\Sigma_{t-1}\left.G_{t}\right|_{\mu_{t-1}}+R_{t}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Calculating 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Consider the function 
+\begin_inset Formula $h(x_{t})$
+\end_inset
+
+ in equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ekf_meas_eq"
+
+\end_inset
+
+.
+ This function maps points in the state space 
+\begin_inset Formula $R^{N}$
+\end_inset
+
+ to points in the sensor measurement space, 
+\begin_inset Formula $R^{M}.$
+\end_inset
+
+ Therefore its Jacobian at a point 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ in the state space will be an 
+\begin_inset Formula $NxM$
+\end_inset
+
+ matrix,
+\begin_inset Formula 
+\[
+[H_{t}|_{x_{0}}]_{ij}=[\left.\frac{\delta(h_{t})_{j}}{\delta x_{i}}\right|_{x_{0}}],
+\]
+
+\end_inset
+
+i.e., the derivative matrix consists of the gradient vectors of each of the
+ 
+\begin_inset Formula $M$
+\end_inset
+
+ components of the vector function 
+\begin_inset Formula $h_{t}$
+\end_inset
+
+ arranged in columns.
+\end_layout
+
+\begin_layout Standard
+According to the definition of the update step for Bayes filters, 
+\begin_inset Formula 
+\[
+bel(x_{t})\propto p(z_{t}|x_{t})\overline{bel}(x_{t}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ekf_meas_eq"
+
+\end_inset
+
+, we replace 
+\begin_inset Formula $h(x_{t})$
+\end_inset
+
+ with its Taylor expansion around a representative point in the domain of
+ 
+\begin_inset Formula $x_{t}.$
+\end_inset
+
+ As before, this point should be central to the support of our current best
+ estimate of the state at time 
+\begin_inset Formula $t$
+\end_inset
+
+, and so we select 
+\begin_inset Formula $\overline{\mu}_{t}$
+\end_inset
+
+ as the expansion point.
+ This gives a linear approximation
+\begin_inset Formula 
+\begin{equation}
+h(x_{t})\approx h(\overline{\mu}_{t})+\left.H_{t}\right|_{\overline{\mu}_{t}}\cdot(x_{t}-\overline{\mu_{t}}),\label{eq:matrix_ht}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which should be verified to be a good approximation in the neighborhood
+ of 
+\begin_inset Formula $\overline{\mu}_{t}$
+\end_inset
+
+ where the predicted belief 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
+
+ is concentrated.
+ Then 
+\begin_inset Formula $bel(x_{t})=\eta\text{exp}(-J_{t})$
+\end_inset
+
+, with 
+\begin_inset Formula 
+\[
+J_{t}=\frac{1}{2}[(z_{t}-[h(\overline{\mu}_{t})+\left.H_{t}\right|_{\overline{\mu}_{t}}\cdot(x_{t}-\overline{\mu_{t}})])^{t}Q_{t}^{-1}(z_{t}-[h(\overline{\mu}_{t})+\left.H_{t}\right|_{\overline{\mu}_{t}}\cdot(x_{t}-\overline{\mu_{t}})])+(x_{t}-\overline{\mu}_{t})^{t}\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that this is of the same form as the expression in the linear Kalman
+ filter:
+\begin_inset Formula 
+\[
+J_{t}=\frac{1}{2}[(z_{t}-C_{t}x_{t})^{T}Q_{t}^{-1}(z_{t}-C_{t}x_{t})+(x_{t}-\overline{\mu}_{t})^{T}\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t})],
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $C_{t}$
+\end_inset
+
+ replaced by the (constant) matrix 
+\begin_inset Formula $\left.H_{t}\right|_{\overline{\mu_{t}}},$
+\end_inset
+
+ and 
+\begin_inset Formula $z_{t}$
+\end_inset
+
+ replaced by the constant term 
+\begin_inset Formula $z_{t}-h(\overline{\mu}_{t})+\left.H_{t}\right|_{\overline{\mu}_{t}}\overline{\mu_{t}.}$
+\end_inset
+
+ 
+\begin_inset Formula $J_{t}$
+\end_inset
+
+ is therefore a quadratic in 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+, and 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ is a Gaussian in 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+.
+ To find the mean of the Gaussian, we solve
+\begin_inset Formula 
+\[
+\frac{\delta J_{t}}{\delta x_{t}}=-H_{t}^{t}Q_{t}^{-1}(z_{t}-h(\overline{\mu}_{t})-H_{t}(x_{t}-\overline{\mu}_{t}))+\overline{\Sigma}_{t}^{-1}(x_{t}-\overline{\mu}_{t})=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\implies H_{t}^{t}Q_{t}^{-1}(z_{t}-h(\overline{\mu}_{t}))=(H_{t}^{t}Q_{t}^{-1}H_{t}+\overline{\Sigma}^{-1})(x_{t}-\overline{\mu}_{t}),
+\]
+
+\end_inset
+
+where we have suppressed the evaluation point 
+\begin_inset Formula $\overline{\mu}_{t}$
+\end_inset
+
+ of 
+\begin_inset Formula $H_{t}$
+\end_inset
+
+.
+ Since
+\begin_inset Formula 
+\[
+\frac{\delta^{2}J_{t}}{\delta^{2}x_{t}}=\Sigma^{-1}=H_{t}^{t}Q_{t}^{-1}H_{t}+\overline{\Sigma}^{-1},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we have (as with the linear Kalman case) that
+\begin_inset Formula 
+\[
+\Sigma_{t}H_{t}^{t}Q_{t}^{-1}(z_{t}-h(\overline{\mu}_{t}))=(x_{t}-\overline{\mu}_{t}),
+\]
+
+\end_inset
+
+or 
+\begin_inset Formula 
+\[
+x_{t}=\overline{\mu}_{t}+\Sigma_{t}H_{t}^{t}Q_{t}^{-1}(z_{t}-h(\overline{\mu}_{t})).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This expresses the mean of 
+\begin_inset Formula $bel(x_{t})$
+\end_inset
+
+ as 
+\begin_inset Formula 
+\[
+\mu_{t}=\overline{\mu}_{t}+\Sigma_{t}H_{t}^{t}Q_{t}^{-1}(z_{t}-h(\overline{\mu}_{t}))=\overline{\mu}_{t}+K_{t}(z_{t}-h(\overline{\mu}_{t})),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $K_{t}=\Sigma_{t}H_{t}^{t}Q_{t}^{-1}$
+\end_inset
+
+ is the Kalman gain.
+ Therefore we have
+\begin_inset Formula 
+\[
+bel(x_{t})\sim N(\overline{\mu}_{t}+K_{t}(z_{t}-h(\overline{\mu}_{t})),(H_{t}^{t}Q_{t}^{-1}H_{t}+\overline{\Sigma}^{-1})^{-1}),
+\]
+
+\end_inset
+
+but as in the linear case, replacing 
+\begin_inset Formula $C_{t}$
+\end_inset
+
+ by 
+\begin_inset Formula $H_{t},$
+\end_inset
+
+ we can express the covariance 
+\begin_inset Formula $\Sigma_{t}$
+\end_inset
+
+ as 
+\begin_inset Formula 
+\[
+\Sigma_{t}=(H_{t}^{t}Q_{t}^{-1}H_{t}+\overline{\Sigma}^{-1})^{-1}=(I-K_{t}H_{t})\overline{\Sigma}_{t}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The EKF prediction and update steps therefore proceed as for the linear
+ Kalman Filter, but at every step we must be able to calculate the values
+ 
+\begin_inset Formula $g(u_{t},\mu_{t-1})$
+\end_inset
+
+ and 
+\begin_inset Formula $h(\overline{\mu}_{t}),$
+\end_inset
+
+ and to evaluate their Jacobians 
+\begin_inset Formula $\left.G_{t}\right|_{\mu_{t-1}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\left.H_{t}\right|_{\overline{\mu}_{t}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The EKF will fail if there are significant nonlinearities in the function
+ 
+\begin_inset Formula $g_{u_{t}}(x_{t-1})$
+\end_inset
+
+ in the support of 
+\begin_inset Formula $bel(x_{t-1})$
+\end_inset
+
+, or in the function 
+\begin_inset Formula $h(x_{t})$
+\end_inset
+
+ in the support of 
+\begin_inset Formula $\overline{bel}(x_{t})$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_body
+\end_document
