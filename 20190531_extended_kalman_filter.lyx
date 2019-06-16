@@ -722,11 +722,11 @@ with
 
 \end_inset
 
-where we have suppressed the evaluation point 
-\begin_inset Formula $\overline{\mu}_{t}$
+where we denote 
+\begin_inset Formula $\left.H_{t}\right|_{\overline{\mu}_{t}}$
 \end_inset
 
- of 
+ simply as 
 \begin_inset Formula $H_{t}$
 \end_inset
 

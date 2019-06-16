@@ -1,0 +1,670 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Quaternions as rotations
+\end_layout
+
+\begin_layout Section
+Basic definitions
+\end_layout
+
+\begin_layout Standard
+Quaternions (denoted by 
+\series bold
+H
+\series default
+) are a 4-dimensional real vector space with an additional multiplicative
+ structure.
+ In my opinion, the easiest way to think of a quaternion is as a tuple consistin
+g of a real part and a 3-vector:
+\begin_inset Formula 
+\[
+\mathbf{q}=(q,\vec{\mathbf{q}})
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $q\in R$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{q}\in R^{3}$
+\end_inset
+
+, and having a multiplication structure defined by 
+\begin_inset Formula 
+\begin{equation}
+\mathbf{p\circ q=}(pq-\vec{\mathbf{p}}\cdot\vec{\mathbf{q}},p\cdot\vec{\mathbf{q}}+q\cdot\vec{\mathbf{p}}+\vec{\mathbf{p}}\times\mathbf{\vec{q}}).\label{eq:quat-mult1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The cross product term in the multiplication formula means that quaternion
+ multiplication is, in general, not commutative, but it is associative.
+ 
+\end_layout
+
+\begin_layout Standard
+Another more commonly used definition of quaternions treats them as a sort
+ of extension of complex numbers:
+\begin_inset Formula 
+\[
+\mathbf{q}=q+q_{1}\cdot\mathbf{i}+q_{2}\cdot\mathbf{j}+q_{3}\cdot\mathbf{k},
+\]
+
+\end_inset
+
+with 
+\begin_inset Formula $q,q_{1},q_{2},q_{3}\in R,$
+\end_inset
+
+ and componentwise multiplication defined by
+\begin_inset Formula 
+\[
+\mathbf{i^{2}=j^{2}=k^{2}=ijk}=-1.
+\]
+
+\end_inset
+
+ This definition results in the same multiplication formula given in equation
+ 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:quat-mult1"
+
+\end_inset
+
+.
+ The quaternion 
+\begin_inset Formula $\mathbf{e=}(1,\mathbf{\vec{0}})$
+\end_inset
+
+ is the multiplicative identity for the quaternions.
+\end_layout
+
+\begin_layout Standard
+The conjugate 
+\begin_inset Formula $\mathbf{q^{*}}$
+\end_inset
+
+of a quaternion 
+\begin_inset Formula $\mathbf{q}$
+\end_inset
+
+ is defined by 
+\begin_inset Formula 
+\[
+\mathbf{q^{*}=}(q,\mathbf{-\vec{q}})=q-q_{1}\cdot\mathbf{i}-q_{2}\cdot\mathbf{j}-q_{3}\cdot\mathbf{k.}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The dot product of two quaternions is the usual dot-product mapping two
+ vectors in 
+\begin_inset Formula $R^{4}$
+\end_inset
+
+ to a scalar in 
+\begin_inset Formula $R$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\mathbf{p\cdot q}=pq+p_{1}q_{1}+p_{2}q_{2}+p_{3}q_{3}=pq+\mathbf{\vec{p}\cdot\vec{q.}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It follows that if you multiply a quaternion by its conjugate, you have
+ 
+\begin_inset Formula 
+\begin{equation}
+\mathbf{q\circ q^{*}=\mbox{\textbf{(q\cdot q)e.}}}\label{eq:conj-identity}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The vector space 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+ embeds naturally into the quaternions with real part 0, the 'pure imaginary'
+ quaternions: i.e., 
+\begin_inset Formula $\vec{\mathbf{v}}\mathbf{\in R^{3}}$
+\end_inset
+
+ can be mapped into 
+\series bold
+H
+\series default
+ by 
+\begin_inset Formula $\vec{\mathbf{v}}\mapsto(0,\vec{\mathbf{v}}).$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
+Unit quaternions map to rotations of 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that multiplying two pure imaginary quaternions does not result in
+ a pure imaginary quaternion -- in fact, there is no sensible multiplicative
+ structure that can be defined on 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+ in the way that complex multiplication is defined on 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+, or quaternion multiplication is on 
+\begin_inset Formula $R^{4}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now, for any quaternion 
+\begin_inset Formula $\mathbf{q},$
+\end_inset
+
+ define conjugation of a pure imaginary quaternion 
+\begin_inset Formula $(0,\vec{\mathbf{v})}$
+\end_inset
+
+ by 
+\begin_inset Formula $\mathbf{q}$
+\end_inset
+
+ as: 
+\begin_inset Formula 
+\[
+\mathbf{R_{q}}((0,\vec{\mathbf{v})})=\mathbf{q}\circ(0,\vec{\mathbf{v}})\circ\mathbf{q^{*}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Conjugation is a linear map, i.e., for 
+\begin_inset Formula $\alpha,\beta\in R$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{\mathbf{v}},\vec{\mathbf{w}}\in R^{3}$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\mathbf{q}\circ(0,\alpha\vec{\mathbf{v}}+\beta\vec{\mathbf{w}})\circ\mathbf{q^{*}=\alpha\mathbf{q}\circ(0,\vec{\mathbf{v}})\circ\mathbf{q^{*}}}+\beta\mathbf{q}\circ(0,\vec{\mathbf{w}})\circ\mathbf{q^{*}}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have 
+\begin_inset Formula 
+\[
+\mathbf{q}\circ(0,\vec{\mathbf{v}})\circ\mathbf{q^{*}}=(q,\vec{\mathbf{q}})\circ(0,\vec{\mathbf{v}})\circ(q,-\vec{\mathbf{q}})
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=(-\vec{\mathbf{q}}\cdot\vec{\mathbf{v}},q\vec{\mathbf{v}}+\vec{\mathbf{q}}\times\vec{\mathbf{v}})\circ(q,-\vec{\mathbf{q}}).
+\]
+
+\end_inset
+
+The real part of the resulting quaternion is
+\begin_inset Formula 
+\[
+\text{Re}(\mathbf{q}\circ(0,\vec{\mathbf{v}})\circ\mathbf{q^{*}})=-q(\vec{\mathbf{q}}\cdot\vec{\mathbf{v}})-(q\vec{\mathbf{v}}+\vec{\mathbf{q}}\times\vec{\mathbf{v}})\cdot(-\vec{\mathbf{q}})=-q(\vec{\mathbf{q}}\cdot\vec{\mathbf{v}})+q(\vec{\mathbf{q}}\cdot\vec{\mathbf{v}})+(\vec{\mathbf{q}}\times\vec{\mathbf{v}})\cdot\vec{\mathbf{q}}=(\vec{\mathbf{q}}\times\vec{\mathbf{v}})\cdot\vec{\mathbf{q}}=0.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that 
+\begin_inset Formula $(\vec{\mathbf{q}}\times\vec{\mathbf{v}})\cdot\vec{\mathbf{q}}=0$
+\end_inset
+
+ because the cross product of two vectors is always orthogonal to both of
+ the original vectors.
+\end_layout
+
+\begin_layout Standard
+Therefore, conjugation of a pure imaginary quaternion by any quaternion
+ results in a pure imaginary quaternion, and we can think of conjugation
+ by a quaternion 
+\begin_inset Formula $\mathbf{q},$
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+, as a linear map from 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+ to 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In fact, the imaginary (
+\begin_inset Formula $R^{3}$
+\end_inset
+
+) part of the conjugated quaternion is 
+\begin_inset Formula 
+\[
+\text{Im}(\mathbf{q}\circ(0,\vec{\mathbf{v}})\circ\mathbf{q^{*}})=\vec{\mathbf{v}}+2q(\mathbf{\vec{q}}\times\vec{\mathbf{v}})+2\mathbf{\vec{q}}\times(\vec{\mathbf{q}}\times\mathbf{\vec{v}}),
+\]
+
+\end_inset
+
+so this formula defines the linear map 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+We can also view the conjugation map itself, 
+\begin_inset Formula $\mathbf{R:}\mathbf{q}\mapsto\mathbf{R_{q}}$
+\end_inset
+
+, as a map from the quaternions to the set of linear functions on 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+.
+ As it happens, conjugation maps the product structure of the quaternions
+ to the composition of maps in 
+\begin_inset Formula $R^{3}:$
+\end_inset
+
+ i.e., 
+\begin_inset Formula $\mathbf{R_{p\circ q}=R_{p}R_{q}}.$
+\end_inset
+
+ Now restrict the quaternion 
+\begin_inset Formula $\mathbf{q}$
+\end_inset
+
+ to be a unit quaternion, i.e.
+ 
+\begin_inset Formula $\mbox{\textbf{q}}\cdot\mathbf{q}=1.$
+\end_inset
+
+ Then by equation 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:conj-identity"
+
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\mathbf{R_{q}R_{q^{*}}=R_{q\circ q^{*}}=R_{(q\cdot q)e}=R_{e}=Id}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In other words, if 
+\begin_inset Formula $\mathbf{q}$
+\end_inset
+
+ is a unit quaternion, then 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+ is an inverse to 
+\begin_inset Formula $\mathbf{R}_{\mathbf{q^{*}}}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We want to go further, and show that 
+\begin_inset Formula $\mathbf{R}_{\mathbf{q}}$
+\end_inset
+
+ are actually rotations of 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+.
+ The easiest way to see this is to use the identities:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{(p\circ q)\cdot r=p\cdot(r\circ q^{*})}\text{ and }(\mathbf{q}\circ\mathbf{p)\cdot r=p\cdot(q^{*}\circ r),}\label{adjoints}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+the first of which is proven below.
+ Given these identities, for 
+\begin_inset Formula $\vec{\mathbf{v}},\vec{\mathbf{w}}\in R^{3}$
+\end_inset
+
+ and for 
+\begin_inset Formula $\mathbf{q}$
+\end_inset
+
+ a unit quaternion, we have
+\begin_inset Formula 
+\[
+(\mathbf{R_{q}(}(0,\mathbf{\vec{v}})\mathbf{)\cdot\mathbf{R_{q}(}(}0\mathbf{,\mathbf{\vec{w}})\mathbf{)=(q\circ(}}0\mathbf{\mathbf{,\mathbf{\vec{v}})\circ q^{*})\cdot(q\circ(}}0\mathbf{\mathbf{,\mathbf{\vec{w}})\circ q^{*})}}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=(\mathbf{q}^{*}\circ\mathbf{q}\circ(0,\mathbf{\vec{v}})\circ\mathbf{q}^{*}\circ\mathbf{q})\cdot(0,\mathbf{\vec{w}})=(\mathbf{e\circ}(0\mathbf{,\mathbf{\vec{v}}})\circ\mathbf{e)\cdot}(0\mathbf{,\mathbf{\vec{w}}})=(0\mathbf{,\mathbf{\vec{v}}})\cdot(0\mathbf{,\mathbf{\vec{w}}}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It follows that the linear map 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+, for 
+\begin_inset Formula $\mathbf{q}$
+\end_inset
+
+ a unit quaternion, preserves inner products.
+ Therefore 
+\begin_inset Formula $\mathbf{R_{q}}\in\mathbf{O(3)},$
+\end_inset
+
+ the group of orthogonal matrices in 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+It remains only to show that the isometries 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+ are orientation-preserving, and therefore are pure rotations without any
+ reflection components; i.e., that 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+ is actually an element of the special orthogonal group 
+\begin_inset Formula $\mathbf{SO(3)}$
+\end_inset
+
+ of orthogonal matrices having determinant 1.
+ It can be proven directly that the formula for 
+\begin_inset Formula $\mathbf{R_{q}}$
+\end_inset
+
+ yields a rotation, but it is faster to observe that the unit quaternions
+ are isometric to the unit sphere in 
+\begin_inset Formula $R^{4}$
+\end_inset
+
+, and therefore form a path-connected set.
+ It follows that, since conjugation forms a continuous mapping from the
+ unit quaternions to 
+\begin_inset Formula $\mathbf{O(3)}$
+\end_inset
+
+, the image of the unit quaternions under this mapping must form a path-connecte
+d set as well.
+ Therefore the entire image of the unit quaternions must lie within a path
+ connected component of 
+\begin_inset Formula $\mathbf{O(3)}$
+\end_inset
+
+.
+ It is known that 
+\begin_inset Formula $\mathbf{O(3)}$
+\end_inset
+
+ has two path-connected components: one is formed by orientation-preserving
+ isometries in 
+\begin_inset Formula $\mathbf{SO(3)}$
+\end_inset
+
+ (with determinant 1), and the other is formed by orientation reversing
+ isometries (with determinant -1).
+ Since the unit quaternion 
+\begin_inset Formula $\mathbf{e}$
+\end_inset
+
+ maps to the identity 
+\begin_inset Formula $\mathbf{I_{3}},$
+\end_inset
+
+ the image of the unit quaternions under conjugation must lie within 
+\begin_inset Formula $\mathbf{SO(3).}$
+\end_inset
+
+ It turns out that any rotation within 
+\begin_inset Formula $\mathbf{SO(3)}$
+\end_inset
+
+ can be constructed as the image of a unit quaternion under conjugation.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof of equation 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "adjoints"
+
+\end_inset
+
+: 
+\series default
+On the left side, we have 
+\begin_inset Formula 
+\[
+(\mathbf{p\circ q)\cdot r=}(pq-\mathbf{\vec{p}}\cdot\vec{\mathbf{q}},p\vec{\mathbf{q}}+q\vec{\mathbf{p}}+\mathbf{\vec{p}}\times\mathbf{\vec{q}})\cdot(r,\mathbf{\vec{r}})
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=(pqr-r\vec{\mathbf{p}}\cdot\vec{\mathbf{q}})\mathbf{+}(p\mathbf{\vec{q}\cdot\vec{r}}+q\vec{\mathbf{p}}\cdot\vec{\mathbf{r}}+(\mathbf{\vec{p}}\times\mathbf{\vec{q}})\cdot\vec{\mathbf{r}).}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On the right, recalling that 
+\begin_inset Formula $\mathbf{q^{*}}=(q,-\vec{\mathbf{q}}),$
+\end_inset
+
+ we have:
+\begin_inset Formula 
+\[
+\mathbf{p\cdot(r\circ q^{*})}=(p,\vec{\mathbf{p}})\cdot(rq-\vec{\mathbf{r}}\cdot(-\vec{\mathbf{q}}),r(-\vec{\mathbf{q)}}+q\vec{\mathbf{r}}+\vec{\mathbf{r}}\times(-\vec{\mathbf{q}}))
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=(pqr+p\vec{\mathbf{r}}\cdot\vec{\mathbf{q}})+(-r\mathbf{\vec{p}}\cdot\vec{\mathbf{q}}+q\vec{\mathbf{p}}\cdot\vec{\mathbf{r}}+\vec{\mathbf{p}}\cdot(\vec{\mathbf{r}}\times(-\vec{\mathbf{q}}))).
+\]
+
+\end_inset
+
+Comparing the two sides, we see that they are equal provided it can be shown
+ that 
+\begin_inset Formula 
+\[
+(\mathbf{\vec{p}}\times\mathbf{\vec{q}})\cdot\vec{\mathbf{r}}=\vec{\mathbf{p}}\cdot(\vec{\mathbf{r}}\times(-\vec{\mathbf{q}})),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which follows from the cross-product identities 
+\begin_inset Formula $\vec{\mathbf{r}}\times(-\vec{\mathbf{q}})=\vec{\mathbf{q}}\times\vec{\mathbf{r}}$
+\end_inset
+
+ and 
+\begin_inset Formula $(\mathbf{\vec{p}}\times\mathbf{\vec{q}})\cdot\vec{\mathbf{r}}=\vec{\mathbf{p}}\cdot(\vec{\mathbf{q}}\times\vec{\mathbf{r}}).$
+\end_inset
+
+ This completes the proof of equation 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "adjoints"
+
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document
